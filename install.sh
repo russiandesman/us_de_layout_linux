@@ -1,5 +1,7 @@
 #! /bin/bash
 
+cp us-de /usr/share/X11/xkb/symbols
+
 layouts_file="/usr/share/X11/xkb/rules/evdev.xml"
 
 export insert_before_string="</layoutList>"
