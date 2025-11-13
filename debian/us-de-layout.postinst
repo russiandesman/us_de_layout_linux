@@ -1,0 +1,45 @@
+#!/bin/sh
+set -e
+
+package="us-de-layout"
+layouts_file="/usr/share/X11/xkb/rules/evdev.xml"
+backup_suffix="${package}_backup"
+backup_layouts_file="${layouts_file}.${backup_suffix}"
+
+export insert_before_string="</layoutList>"
+export layout_description="
+    <layout>
+      <configItem>
+        <name>us-de</name>
+        <shortDescription>en(US+DE)</shortDescription>
+        <description>en(US+DE) RAlt for l3</description>
+        <languageList>
+          <iso639Id>eng</iso639Id>
+          <iso639Id>deu</iso639Id>
+        </languageList>
+      </configItem>
+      <variantList/>
+    </layout>
+"
+layout_id_string="<name>us-de</name>"
+
+case "$1" in
+	configure|upgrade)
+		if [ ! -f "${layouts_file}" ]; then
+			echo "Error: ${layouts_file} not found. Cannot add us-de layout." >&2
+			exit 1
+		fi
+		# Create diversion of layout if not already present
+		if ! dpkg-divert --listpackage "${layouts_file}" | grep -q "${package}"; then
+			dpkg-divert --package "${package}" --add --rename --divert "${backup_layouts_file}" "${layouts_file}"
+		fi
+
+		if ! grep -q "${layout_id_string}" ${layouts_file}; then
+			perl -i -pe 'print "$ENV{layout_description}\n" if m|$ENV{insert_before_string}|' ${layouts_file}
+		else
+			echo "us-de layout already present in ${layouts_file}, skipping modification."
+		fi
+	;;
+esac
+
+#DEBHELPER#

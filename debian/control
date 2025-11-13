@@ -1,0 +1,15 @@
+Source: us-de-layout
+Section: x11
+Priority: optional
+Maintainer: Denis Maryin <des.maryin@googlemail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.0
+Homepage: https://github.com/russiandesman/us_de_layout_linux
+
+Package: us-de-layout
+Architecture: all
+Depends: ${misc:Depends}, xkb-data (>= 2.0)
+Description: German ä,ö,ü,ß add-on for US layout
+ Adds a US-DE keyboard layout variant for typing German umlauts (ä,ö,ü,ß) on US hardware.
+ Select "en(US+DE) RAlt for l3" in your layout tool (e.g., xfce4-keyboard-settings).
+ The original evdev.xml is safely modified and restored on removal.

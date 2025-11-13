@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+package="us-de-layout"
+layouts_file="/usr/share/X11/xkb/rules/evdev.xml"
+backup_suffix="${package}_backup"
+backup_layouts_file="${layouts_file}.${backup_suffix}"
+
+case "$1" in
+	remove|upgrade)
+		# Remove diversion if it exists
+		if dpkg-divert --listpackage "${layouts_file}" | grep -q "${package}"; then
+			dpkg-divert --package "${package}" --remove --rename --divert "${backup_layouts_file}" "${layouts_file}"
+		fi
+	;;
+esac
+
+#DEBHELPER#
