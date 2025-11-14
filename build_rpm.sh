@@ -1,15 +1,15 @@
 #!/bin/bash
 set -ex
 
-test -z ${RPMFULLNAME} && { echo "RPMFULLNAME must be set"; exit 1; }
-test -z ${RPMEMAIL} && { echo "RPMEMAIL must be set"; exit 1; }
-
 BUILD_DIR=$(mktemp -d)
 trap 'rm -rf "${BUILD_DIR}"' EXIT
 
 PKGNAME="us-de-layout"
 
 TAG=$(git describe --tags --match 'v*' --abbrev=0 2>/dev/null || echo "v0.0")
+RPMFULLNAME=$(git log -n 1 --pretty=format:%an)
+RPMEMAIL=$(git log -n 1 --pretty=format:%ae)
+
 UPSTREAM_VER=${TAG#v}
 DISTANCE=$(git rev-list --count "${TAG}..HEAD")
 RPM_REV=$((DISTANCE + 1))

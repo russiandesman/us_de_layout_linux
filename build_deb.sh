@@ -1,15 +1,14 @@
 #!/bin/bash
 set -e
 
-test -z ${DEBFULLNAME} && { echo "DEBFULLNAME must be set"; exit 1; }
-test -z ${DEBEMAIL} && { echo "DEBEMAIL must be set"; exit 1; }
-
 BUILD_DIR=$(mktemp -d)
 trap 'rm -rf "${BUILD_DIR}"' EXIT
 
 PKGNAME="us-de-layout"
 
 TAG=$(git describe --tags --match 'v*' --abbrev=0 2>/dev/null || echo "v0.0")
+export DEBFULLNAME=$(git log -n 1 --pretty=format:%an)
+export DEBEMAIL=$(git log -n 1 --pretty=format:%ae)
 UPSTREAM_VER=${TAG#v}
 DISTANCE=$(git rev-list --count "${TAG}..HEAD")
 DEBIAN_REV=$((DISTANCE + 1))
