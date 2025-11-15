@@ -6,7 +6,7 @@ trap 'rm -rf "${BUILD_DIR}"' EXIT
 
 PKGNAME="us-de-layout"
 
-TAG=$(git describe --tags --match 'v*' --abbrev=0 2>/dev/null || echo "v0.0")
+TAG=$(git describe --tags --match 'v*' --abbrev=0 2>/dev/null || echo "NO_TAGS_FOUND")
 export DEBFULLNAME=$(git log -n 1 --pretty=format:%an)
 export DEBEMAIL=$(git log -n 1 --pretty=format:%ae)
 UPSTREAM_VER=${TAG#v}
