@@ -9,6 +9,8 @@ Download and run install.sh script as root
 
 Alternatively download the debian package from [Releases](https://github.com/russiandesman/us_de_layout_linux/releases) page
 
+[![GitHub All Releases](https://img.shields.io/github/downloads/russiandesman/us_de_layout_linux/total?label=downloads-total&logo=github&style=flat-square)](https://github.com/russiandesman/us_de_layout_linux/releases)
+
 Now select "**en(US+DE) RAlt for l3**" from the list of layouts in your keyboard layout selection tool (xfce4-keyboard-settings in XFCE for example)
 
 to type **ä** press ```right alt + a```, to type **Ä** press ```shift + right alt + a```.
