@@ -10,6 +10,9 @@ jobs:
           - name: Checkout sources
             uses: actions/checkout@v4
 
+          - name: Fetch tags explicitly
+            run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
           - name: Build RPM
             shell: bash
             run: |
