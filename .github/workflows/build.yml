@@ -7,8 +7,8 @@ jobs:
     build-installer:
         runs-on: ubuntu-latest
         steps:
-          - name: Install devscripts and debhelper
-            run: sudo apt-get update && sudo apt-get install -y devscripts debhelper
+          - name: Install devscripts, debhelper and build-essential
+            run: sudo apt-get update && sudo apt-get install -y devscripts debhelper build-essential
 
           - name: Checkout sources
             uses: actions/checkout@v4
