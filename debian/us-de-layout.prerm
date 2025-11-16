@@ -7,9 +7,9 @@ backup_suffix="${package}_backup"
 backup_layouts_file="${layouts_file}.${backup_suffix}"
 
 case "$1" in
-	remove|upgrade)
+	remove|deconfigure)
 		# Remove diversion if it exists
-		if dpkg-divert --listpackage "${layouts_file}" | grep -q "${package}"; then
+		if dpkg-divert --listpackage "${layouts_file}" 2>/dev/null | grep -q '^${package}$'; then
 			dpkg-divert --package "${package}" --remove --rename --divert "${backup_layouts_file}" "${layouts_file}"
 		fi
 	;;

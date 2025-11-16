@@ -5,6 +5,9 @@ package="us-de-layout"
 layouts_file="/usr/share/X11/xkb/rules/evdev.xml"
 backup_suffix="${package}_backup"
 backup_layouts_file="${layouts_file}.${backup_suffix}"
+tmp_file="${layouts_file}.${package}_tmp"
+
+trap 'rm -f "${tmp_file}"' EXIT
 
 export insert_before_string="</layoutList>"
 export layout_description="
@@ -25,20 +28,25 @@ layout_id_string="<name>us-de</name>"
 
 case "$1" in
 	configure|upgrade)
-		if [ ! -f "${layouts_file}" ]; then
-			echo "Error: ${layouts_file} not found. Cannot add us-de layout." >&2
-			exit 1
-		fi
 		# Create diversion of layout if not already present
 		if ! dpkg-divert --listpackage "${layouts_file}" | grep -q "${package}"; then
 			dpkg-divert --package "${package}" --add --rename --divert "${backup_layouts_file}" "${layouts_file}"
 		fi
+		if [ ! -f "${backup_layouts_file}" ]; then
+			echo "Error: ${backup_layouts_file} not found. Cannot add us-de layout." >&2
+			exit 1
+		fi
 
-		if ! grep -q "${layout_id_string}" ${layouts_file}; then
-			perl -i -pe 'print "$ENV{layout_description}\n" if m|$ENV{insert_before_string}|' ${layouts_file}
+		if ! grep -q "${layout_id_string}" ${backup_layouts_file}; then
+			perl -pe 'print "$ENV{layout_description}\n" if m|$ENV{insert_before_string}|' ${backup_layouts_file} > ${tmp_file}
+			chmod --reference="${backup_layouts_file}" "${tmp_file}"
+			chown --reference="${backup_layouts_file}" "${tmp_file}"
 		else
 			echo "us-de layout already present in ${layouts_file}, skipping modification."
+			cp -p ${backup_layouts_file} ${tmp_file}
 		fi
+		mv -f "${tmp_file}" "${layouts_file}"
+
 	;;
 esac
 
