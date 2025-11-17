@@ -70,6 +70,7 @@ fi
 %files
 %license LICENSE
 /usr/share/X11/xkb/symbols/us-de
+/usr/share/%{name}
 %ghost /usr/share/%{name}/evdev.xml.backup
 
 %changelog
