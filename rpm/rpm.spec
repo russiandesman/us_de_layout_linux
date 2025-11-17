@@ -29,12 +29,6 @@ install -m 644 us-de %{buildroot}/usr/share/X11/xkb/symbols/us-de
 # Create directory for backup
 install -d -m 755 %{buildroot}/usr/share/%{name}
 
-%pre
-# Backup evdev.xml before modification
-if [ -f /usr/share/X11/xkb/rules/evdev.xml ]; then
-	cp -p /usr/share/X11/xkb/rules/evdev.xml /usr/share/%{name}/evdev.xml.backup
-fi
-
 %post
 layouts_file="/usr/share/X11/xkb/rules/evdev.xml"
 
@@ -54,6 +48,11 @@ export layout_description="
     </layout>
 "
 layout_id_string="<name>us-de</name>"
+
+# Backup evdev.xml before modification
+if [ -f /usr/share/X11/xkb/rules/evdev.xml ]; then
+	cp -p /usr/share/X11/xkb/rules/evdev.xml /usr/share/%{name}/evdev.xml.backup
+fi
 
 # if not already inserted
 if ! grep -q "${layout_id_string}" ${layouts_file}; then
